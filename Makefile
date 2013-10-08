@@ -1,24 +1,25 @@
 
-all: test
+TARGET=ejson
+VSN=0.1.0
+ERL_ROOT=/usr/local/lib/erlang
+ERL_LIB=$(ERL_ROOT)/lib
 
-test: beam
-	test/literals.escript
-	test/numbers.escript
-	test/strings.escript
-	test/objects.escript
-	test/arrays.escript
-	test/compound.escript
-	test/timing.escript
 
-BUILT=\
-    ebin/ejson.beam \
-	ebin/ejson_decode.beam \
-	ebin/ejson_encode.beam \
-	ebin/mochijson2.beam \
-	ebin/rfc4627.beam
+all: $(TARGET) boot
 
-beam: $(BUILT)
+$(TARGET):
+	erl -make
 
-ebin/%.beam: src/%.erl
-	@mkdir -p ebin
-	erlc -o ebin/ $<
+boot:
+	erl -noinput -eval 'systools:make_script("$(TARGET)")' -s erlang halt
+
+clean:
+	rm -rf *.beam *.script *.boot *~
+
+install:
+	install -d $(ERL_LIB)/$(TARGET)-$(VSN)/
+	install -d $(ERL_LIB)/$(TARGET)-$(VSN)/ebin/
+	install -d $(ERL_LIB)/$(TARGET)-$(VSN)/src/
+	install -m 644 *.beam $(ERL_LIB)/$(TARGET)-$(VSN)/ebin/
+	install -m 644 ejson.app $(ERL_LIB)/$(TARGET)-$(VSN)/ebin/
+	install -m 644 *.erl $(ERL_LIB)/$(TARGET)-$(VSN)/src/
