@@ -1,6 +1,6 @@
 
 TARGET=ejson
-VSN=0.1.1
+VSN=0.1.4
 ERL_ROOT=/usr/local/lib/erlang
 ERL_LIB=$(ERL_ROOT)/lib
 
